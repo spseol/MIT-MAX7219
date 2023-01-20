@@ -1,22 +1,15 @@
 {
-    "env": {
-        "myDefaultIncludePath": [
-            "${workspaceFolder}",
-            "${workspaceFolder}/inc"
-        ],
-        "myCompilerPath": "/usr/bin/sdcc"
-    },
     "configurations": [
         {
             "name": "STM8",
             "includePath": [
-                "${workspaceFolder}/inc",
-                "${workspaceFolder}/src",
-                "${workspaceFolder}/../SPL/inc/",
-                "${workspaceFolder}/SPL/inc/"
+                "inc",
+                "src",
+                "../SPL/inc/",
+                "SPL/inc/"
             ],
             "defines": [
-                "STM8S",
+                "STM8S103",
                 "_SDCC_"
             ],
             "compilerPath": "/usr/bin/sdcc",
