@@ -27,6 +27,7 @@ CC = $(CC_ROOT)/bin/sdcc
 
 #DEVICE=STM8S103
 DEVICE=$(shell .make/device $(DEVICE_FLASH))
+DEVICE_FLASH_UP=$(shell echo $(DEVICE_FLASH) | tr '[:lower:]' '[:upper:]')
 
 MKDIR = mkdir
 CP = cp
@@ -53,7 +54,7 @@ ifeq ($(OS),Windows_NT)
 
 	LN = cp
 	PYTHON = python
-	STVP = "$(STVP_ROOT)/STVP_CmdLine.exe"
+	STVP = $(STVP_ROOT)/STVP_CmdLine.exe
 
 else
     uname_S := $(shell uname -s)
@@ -140,7 +141,7 @@ clean::
 
 flash: $(TARGET).ihx
 ifeq ($(OS),Windows_NT)
-	$(STVP) -BoardName=ST-LINK -Device=$(DEVICE_FLASH) -Port=USB -ProgMode=SWIM -no_loop -no_log -FileProg=$(TARGET).ihx
+	$(STVP) -BoardName=ST-LINK -Device=$(DEVICE_FLASH_UP) -Port=USB -ProgMode=SWIM -no_loop -no_log -FileProg=$(TARGET).ihx
 else
 	$(OPENOCD) -c "init" -c "program_device $(TARGET).ihx 0"
 endif
