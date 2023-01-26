@@ -1,27 +1,32 @@
 ######################################################
-#         Makefile pro sdccrm
+#         Makefile for sdccrm
 ######################################################
-# makefile for STM8S_StdPeriph_Lib and SDCC compiler
 #
-# Customized by MightyPork 1/2017
+#### STM8 device
 #
-# usage:
-#   1. if SDCC not in PATH set path -> CC_ROOT
-#   2. set correct STM8 device -> DEVICE
-#   3. set project paths -> PRJ_ROOT, PRJ_SRC_DIR, PRJ_INC_DIR
-#   4. set SPL root path -> SPL_ROOT
-#   5. include required SPL modules -> SPL_SOURCE
-#
-#######
-
-# STM8 device (default is STM8 discovery board)
-DEVICE=STM8S103
+#DEVICE_FLASH=stm8s208rb
+#DEVICE_FLASH=stm8s105c6
+#DEVICE_FLASH=stm8s003k3
 DEVICE_FLASH=stm8s103f3
 
+### STlink version for falsh2 targer (stm8flash program)
 STLINK=stlinkv2
 STLINK=stlink
+STLINK=stlinkv21
 
 F_CPU=16000000
+
+ifeq ($(OS),Windows_NT)
+	CC_ROOT = "/c/Program Files/SDCC"
+	STVP_ROOT = "/c/Program Files (x86)/STMicroelectronics/st_toolset/stvp"
+else
+	CC_ROOT = /usr
+endif
+######################################################################################
+CC = $(CC_ROOT)/bin/sdcc
+
+#DEVICE=STM8S103
+DEVICE=$(shell .make/device $(DEVICE_FLASH))
 
 MKDIR = mkdir
 CP = cp
@@ -46,17 +51,13 @@ OPENOCD = openocd -f .make/stm8s-flash.cfg -f $(interface) -f $(target)
 ifeq ($(OS),Windows_NT)
     uname_S := Windows
 
-	CC_ROOT = "/c/Program Files/SDCC"
-	CC = $(CC_ROOT)/bin/sdcc
 	LN = cp
 	PYTHON = python
-	STVP = "/c/Program Files (x86)/STMicroelectronics/st_toolset/stvp/STVP_CmdLine.exe"
+	STVP = "$(STVP_ROOT)/STVP_CmdLine.exe"
 
 else
     uname_S := $(shell uname -s)
 	
-	CC_ROOT = /usr
-	CC = $(CC_ROOT)/bin/sdcc
 	LN = ln -sf
 	PYTHON = python3
 endif
@@ -138,8 +139,11 @@ clean::
 	rm -Rf $(OUTPUT_DIR)
 
 flash: $(TARGET).ihx
-	$(STVP) -BoardName=ST-LINK -Device=STM8S103F3 -Port=USB -ProgMode=SWIM -no_loop -no_log -FileProg=$(TARGET).ihx
-	#$(OPENOCD) -c "init" -c "program_device $(TARGET).ihx 0"
+ifeq ($(OS),Windows_NT)
+	$(STVP) -BoardName=ST-LINK -Device=$(DEVICE_FLASH) -Port=USB -ProgMode=SWIM -no_loop -no_log -FileProg=$(TARGET).ihx
+else
+	$(OPENOCD) -c "init" -c "program_device $(TARGET).ihx 0"
+endif
 
 flash2: $(TARGET).ihx
 	stm8flash -c $(STLINK) -p $(DEVICE_FLASH) -s flash -w $(TARGET).ihx

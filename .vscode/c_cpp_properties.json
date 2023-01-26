@@ -3,6 +3,8 @@
         {
             "name": "STM8",
             "includePath": [
+                "${workspaceFolder}/**",
+                "C:/Program Files/SDCC/include/**",
                 "inc",
                 "src",
                 "../SPL/inc/",
@@ -12,7 +14,7 @@
                 "STM8S103",
                 "_SDCC_"
             ],
-            "compilerPath": "/usr/bin/sdcc",
+            "compilerPath": "C:/Program Files/SDCC/bin/sdcc",
             "cStandard": "c99",
             "cppStandard": "c++11",
             "intelliSenseMode": "gcc-x64",
