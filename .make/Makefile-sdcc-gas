@@ -19,7 +19,7 @@ ifeq ($(OS),Windows_NT)
 	CC_ROOT = "/c/Program Files/SDCC"
 	STVP_ROOT = "/c/Program Files (x86)/STMicroelectronics/st_toolset/stvp"
 else
-	CC_ROOT = /usr
+	CC_ROOT = /usr/local/stow/sdcc-gas
 endif
 ######################################################################################
 CC = $(CC_ROOT)/bin/sdcc
