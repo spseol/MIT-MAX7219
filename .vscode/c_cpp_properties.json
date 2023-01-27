@@ -25,7 +25,8 @@
                 "-mstm8",
                 "-lstm8",
                 "--std-sdcc99"
-            ]
+            ],
+            "configurationProvider": "ms-vscode.makefile-tools"
         }
     ],
     "version": 4
